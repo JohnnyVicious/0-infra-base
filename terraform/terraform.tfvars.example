@@ -1,0 +1,9 @@
+# Copy this file to terraform.tfvars and fill in your values
+# terraform.tfvars is gitignored and will not be committed
+
+github_owner = "your-github-username-or-org"
+# github_token is best stored in Vault or environment variable
+# github_token = "ghp_xxxxxxxxxxxxx"
+
+repository_visibility = "private"
+default_branch        = "main"
