@@ -23,15 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 360
 
-    strategy:
-      fail-fast: false
-      matrix:
-        # Add languages used in your repository
-        # Supported: cpp, csharp, go, java, javascript, python, ruby, swift
-        language:
-          - python  # For any Python scripts
-          - javascript  # For GitHub Actions and any JS/Node scripts
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,7 +30,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: ${{ matrix.language }}
+          languages: auto
           # Use custom configuration
           config-file: ./.github/codeql/codeql-config.yml
           # Configure queries to run
@@ -59,6 +50,5 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{matrix.language}}"
           # Upload results to GitHub Security tab
           upload: true
