@@ -10,8 +10,3 @@ paths-ignore:
   - 'vault/data/**'
   - 'vault/logs/**'
   - '.terraform/**'
-
-# Additional query packs to run
-packs:
-  - codeql/javascript-queries:security-extended
-  - codeql/python-queries:security-extended
