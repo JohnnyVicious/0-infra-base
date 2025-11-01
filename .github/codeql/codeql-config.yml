@@ -11,22 +11,7 @@ paths-ignore:
   - 'vault/logs/**'
   - '.terraform/**'
 
-# Paths to explicitly include
-paths:
-  - 'scripts/**'
-  - '.github/workflows/**'
-  - 'terraform/**'
-
-# Additional queries to run
-queries:
-  - uses: security-and-quality
-  - uses: security-extended
-
-# Disable default queries that may cause false positives
-disable-default-queries: false
-
-# Configure query filters
-query-filters:
-  - exclude:
-      # Exclude specific query IDs if needed
-      # id: js/example-query
+# Additional query packs to run
+packs:
+  - codeql/javascript-queries:security-extended
+  - codeql/python-queries:security-extended
