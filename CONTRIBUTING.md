@@ -157,6 +157,50 @@ Release notes are automatically generated and grouped by category:
 - docs: update bootstrap guide
 ```
 
+## Automated Dependency Updates
+
+This repository uses [Renovate Bot](https://docs.renovatebot.com/) to automatically keep dependencies up to date.
+
+### What Renovate Updates
+
+- **Docker images** (e.g., `hashicorp/vault`)
+- **Terraform providers** (e.g., GitHub provider)
+- **GitHub Actions** (e.g., `actions/checkout`)
+
+### How It Works
+
+1. **Renovate scans** the repository weekly (Mondays before 6 AM)
+2. **Creates PRs** for outdated dependencies
+3. **Labels PRs** automatically (e.g., `dependencies`, `docker`, `security`)
+4. **Groups updates** logically (e.g., all GitHub Actions together)
+5. **Uses conventional commits** (e.g., `chore(deps): update hashicorp/vault`)
+
+### Renovate PR Types
+
+| Update Type | PR Title Format | Auto-merge |
+|------------|-----------------|------------|
+| Major updates | `feat(deps): update X to v2` | No |
+| Minor/Patch | `chore(deps): update X to v1.2` | No (but labeled) |
+| Security | `fix(security): update X` | No |
+
+### Dependency Dashboard
+
+Renovate creates a **Dependency Dashboard** issue listing:
+- Pending updates
+- Rate-limited PRs
+- Ignored dependencies
+- Configuration errors
+
+### Managing Renovate PRs
+
+**Review and merge** like normal PRs:
+- PRs follow conventional commits (trigger releases)
+- Major updates labeled `major-update` (require careful review)
+- Minor/patch updates labeled `automerge-candidate` (safer)
+- Security updates labeled `security` (high priority)
+
+**Example**: `chore(deps): update hashicorp/vault to v1.15.0` triggers a patch release
+
 ## Local Development
 
 ### Prerequisites

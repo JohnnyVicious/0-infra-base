@@ -48,3 +48,28 @@
 - name: 'status: blocked'
   color: 'B60205'
   description: 'Blocked by other work'
+
+# Dependency Labels
+- name: dependencies
+  color: '0366D6'
+  description: 'Dependency updates'
+
+- name: renovate
+  color: '1D76DB'
+  description: 'Managed by Renovate Bot'
+
+- name: docker
+  color: '2496ED'
+  description: 'Docker-related changes'
+
+- name: security
+  color: 'D93F0B'
+  description: 'Security updates'
+
+- name: major-update
+  color: 'D73A4A'
+  description: 'Major version update'
+
+- name: automerge-candidate
+  color: '00FF00'
+  description: 'Safe for auto-merge after review'

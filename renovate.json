@@ -1,0 +1,91 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":enablePreCommit",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "timezone": "America/New_York",
+  "schedule": ["before 6am on monday"],
+  "labels": ["dependencies", "renovate"],
+  "assignees": [],
+  "reviewers": [],
+  "semanticCommits": "enabled",
+  "commitMessagePrefix": "chore(deps):",
+  "commitMessageAction": "update",
+  "commitMessageTopic": "{{depName}}",
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "stabilityDays": 3,
+  "packageRules": [
+    {
+      "description": "Automatically merge minor and patch updates for Docker images",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": false,
+      "labels": ["dependencies", "docker", "automerge-candidate"]
+    },
+    {
+      "description": "Group Terraform provider updates",
+      "matchDatasources": ["terraform-provider"],
+      "groupName": "Terraform providers",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "terraform"
+    },
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "ci",
+      "pinDigests": true
+    },
+    {
+      "description": "Separate major updates",
+      "matchUpdateTypes": ["major"],
+      "labels": ["dependencies", "major-update"],
+      "semanticCommitType": "feat",
+      "automerge": false
+    },
+    {
+      "description": "Use conventional commits for dependency updates",
+      "matchUpdateTypes": ["minor", "patch"],
+      "semanticCommitType": "chore"
+    },
+    {
+      "description": "Pin Docker image digests for security",
+      "matchDatasources": ["docker"],
+      "pinDigests": true
+    }
+  ],
+  "docker": {
+    "enabled": true,
+    "pinDigests": true
+  },
+  "terraform": {
+    "enabled": true
+  },
+  "regexManagers": [
+    {
+      "description": "Update Vault version in documentation",
+      "fileMatch": ["^BOOTSTRAP\\.md$", "^README\\.md$"],
+      "matchStrings": [
+        "vault:(?<currentValue>.*?)@sha"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "hashicorp/vault"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security", "dependencies"],
+    "semanticCommitType": "fix",
+    "semanticCommitScope": "security"
+  },
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Renovate Dashboard",
+  "dependencyDashboardLabels": ["renovate", "dependencies"],
+  "postUpdateOptions": ["gomodTidy"]
+}

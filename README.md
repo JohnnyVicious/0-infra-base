@@ -60,6 +60,7 @@ terraform apply
 
 - **[BOOTSTRAP.md](BOOTSTRAP.md)**: Comprehensive setup guide with all manual steps
 - **[CONTRIBUTING.md](CONTRIBUTING.md)**: Contribution guidelines and release workflow
+- **[.github/renovate.md](.github/renovate.md)**: Renovate Bot configuration and usage
 - **[terraform/](terraform/)**: Terraform configuration for GitHub repository management
 - **[vault/config/](vault/config/)**: Vault configuration files
 
@@ -72,13 +73,16 @@ terraform apply
 ├── CONTRIBUTING.md             # Contribution guide
 ├── Makefile                    # Common commands
 ├── .releaserc.json            # Semantic release configuration
+├── renovate.json              # Renovate Bot configuration
 ├── .github/
 │   ├── workflows/
 │   │   ├── release.yml        # Automated releases
 │   │   ├── pr-labeler.yml     # PR auto-labeling
-│   │   └── label-sync.yml     # Label synchronization
+│   │   ├── label-sync.yml     # Label synchronization
+│   │   └── renovate-validate.yml # Renovate config validation
 │   ├── pull_request_template.md
-│   └── labels.yml             # Repository labels
+│   ├── labels.yml             # Repository labels
+│   └── renovate.md            # Renovate documentation
 ├── terraform/
 │   ├── main.tf                 # Terraform provider configuration
 │   ├── variables.tf            # Input variables
@@ -100,17 +104,26 @@ terraform apply
 - GitHub tokens are stored in Vault, never in code
 - All sensitive files are in `.gitignore`
 
-## Contributing
+## Automation
 
-This repository uses automated semantic versioning. See [CONTRIBUTING.md](CONTRIBUTING.md) for:
-- Conventional commit format
-- Pull request workflow
-- Automated release process
+This repository uses several automation tools:
 
-**TL;DR**: Use conventional commit format for PR titles:
-- `feat:` for new features (minor version)
-- `fix:` for bug fixes (patch version)
-- `feat!:` or `BREAKING CHANGE:` for breaking changes (major version)
+### Semantic Versioning
+Automated releases based on conventional commits. See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+**PR Title Format**:
+- `feat:` → minor version bump (0.x.0)
+- `fix:` → patch version bump (0.0.x)
+- `feat!:` → major version bump (x.0.0)
+
+### Dependency Updates
+[Renovate Bot](.github/renovate.md) automatically creates PRs for:
+- Docker image updates
+- Terraform provider updates
+- GitHub Actions updates
+- Security patches
+
+Runs weekly (Mondays) and creates a Dependency Dashboard issue.
 
 ## Next Steps
 
