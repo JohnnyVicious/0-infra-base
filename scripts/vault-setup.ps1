@@ -13,8 +13,7 @@ Write-Host ""
 # Function to execute vault commands in container
 function Invoke-VaultCommand {
     param([string[]]$Command)
-    $vaultCmd = "vault " + ($Command -join " ")
-    docker exec -it $VAULT_CONTAINER vault @Command
+    docker exec -i $VAULT_CONTAINER vault @Command
 }
 
 # Check if Vault is running
