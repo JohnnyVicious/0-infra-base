@@ -201,6 +201,71 @@ Renovate creates a **Dependency Dashboard** issue listing:
 
 **Example**: `chore(deps): update hashicorp/vault to v1.15.0` triggers a patch release
 
+## Security Scanning
+
+This repository uses **CodeQL** for automated security analysis.
+
+### CodeQL Overview
+
+- **When it runs**:
+  - On every pull request
+  - On every push to main
+  - Weekly (Mondays at 6 AM UTC)
+  - Manually via workflow dispatch
+
+- **Languages scanned**:
+  - Python (scripts)
+  - JavaScript (GitHub Actions, Node scripts)
+
+- **What it checks**:
+  - Security vulnerabilities
+  - Code quality issues
+  - Common coding errors
+  - Best practice violations
+
+### Branch Protection
+
+CodeQL scanning is **required** for all PRs to main:
+- PRs cannot be merged until CodeQL completes
+- All security issues must be resolved or acknowledged
+- Results appear in the "Security" tab
+
+### Handling CodeQL Alerts
+
+1. **View alerts** in the Security tab or PR checks
+2. **Review the issue** and recommended fix
+3. **Fix the code** or dismiss if false positive
+4. **Push changes** to re-run CodeQL
+5. **Verify** the alert is resolved
+
+### CodeQL Configuration
+
+Configuration is in [.github/codeql/codeql-config.yml](.github/codeql/codeql-config.yml):
+- Excludes test files and documentation
+- Runs security-and-quality queries
+- Focuses on actual code, not generated files
+
+### Common Alerts
+
+| Alert Type | Example | Fix |
+|-----------|---------|-----|
+| Hardcoded secrets | API keys in code | Use Vault/env vars |
+| Command injection | Unsanitized user input | Validate/sanitize input |
+| Path traversal | User-controlled paths | Validate paths |
+| SQL injection | Dynamic SQL queries | Use parameterized queries |
+
+### Local CodeQL Analysis (Optional)
+
+Install CodeQL CLI to run locally:
+```bash
+# Install CodeQL CLI
+gh extension install github/gh-codeql
+
+# Run analysis
+codeql database create db --language=python
+codeql database analyze db --format=sarif-latest --output=results.sarif
+```
+
 ## Local Development
 
 ### Prerequisites
