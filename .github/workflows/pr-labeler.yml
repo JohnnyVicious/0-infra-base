@@ -23,7 +23,7 @@ jobs:
             const title = context.payload.pull_request.title;
             const prNumber = context.payload.pull_request.number;
 
-            // Remove existing semver labels
+            // Get current labels
             const currentLabels = await github.rest.issues.listLabelsOnIssue({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -31,16 +31,7 @@ jobs:
             });
 
             const semverLabels = ['semver:major', 'semver:minor', 'semver:patch', 'semver:none'];
-            for (const label of currentLabels.data) {
-              if (semverLabels.includes(label.name)) {
-                await github.rest.issues.removeLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: prNumber,
-                  name: label.name
-                });
-              }
-            }
+            const existingSemverLabel = currentLabels.data.find(label => semverLabels.includes(label.name));
 
             // Determine new label based on conventional commit format
             let newLabel = 'semver:none';
@@ -62,12 +53,28 @@ jobs:
               newLabel = 'semver:patch';
             }
 
-            // Add the new label
-            await github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-              labels: [newLabel]
-            });
+            // Only update labels if they changed
+            if (existingSemverLabel?.name === newLabel) {
+              core.info(`Label already correct: ${newLabel}`);
+            } else {
+              // Remove old semver label if it exists
+              if (existingSemverLabel) {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  name: existingSemverLabel.name
+                });
+                core.info(`Removed label: ${existingSemverLabel.name}`);
+              }
 
-            core.info(`Added label: ${newLabel}`);
+              // Add the new label
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: [newLabel]
+              });
+
+              core.info(`Added label: ${newLabel}`);
+            }
