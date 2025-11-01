@@ -35,3 +35,20 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Vault data and logs (contains secrets)
+vault/data/
+vault/logs/
+
+# Environment files
+.env
+.env.local
+
+# Vault tokens and keys
+.vault-token
+unseal-keys.txt
+root-token.txt
+
+# OS files
+.DS_Store
+Thumbs.db
