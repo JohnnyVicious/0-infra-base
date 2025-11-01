@@ -79,7 +79,10 @@ terraform apply
 │   │   ├── release.yml        # Automated releases
 │   │   ├── pr-labeler.yml     # PR auto-labeling
 │   │   ├── label-sync.yml     # Label synchronization
-│   │   └── renovate-validate.yml # Renovate config validation
+│   │   ├── renovate-validate.yml # Renovate config validation
+│   │   └── codeql.yml         # CodeQL security scanning
+│   ├── codeql/
+│   │   └── codeql-config.yml  # CodeQL configuration
 │   ├── pull_request_template.md
 │   ├── labels.yml             # Repository labels
 │   └── renovate.md            # Renovate documentation
@@ -97,12 +100,19 @@ terraform apply
     └── vault-setup.ps1        # Vault setup helper (Windows)
 ```
 
-## Security Notes
+## Security
 
+### Security Scanning
+- **CodeQL**: Automated security scanning on all PRs and weekly
+- **Dependency Scanning**: Renovate monitors for security vulnerabilities
+- **Branch Protection**: CodeQL required for PR merges
+
+### Security Best Practices
 - Vault data is stored in `./vault/data/` (gitignored)
 - Unseal keys and root token must be stored securely
 - GitHub tokens are stored in Vault, never in code
 - All sensitive files are in `.gitignore`
+- Docker images and GitHub Actions are digest-pinned
 
 ## Automation
 

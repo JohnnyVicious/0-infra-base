@@ -1,0 +1,12 @@
+name: "CodeQL Configuration"
+
+# Paths to exclude from analysis
+paths-ignore:
+  - '**/*.md'
+  - '**/test/**'
+  - '**/tests/**'
+  - '**/*.test.js'
+  - '**/*.spec.js'
+  - 'vault/data/**'
+  - 'vault/logs/**'
+  - '.terraform/**'

@@ -18,7 +18,7 @@ services:
       - ./vault/logs:/vault/logs
     command: server -config=/vault/config/vault.hcl
     healthcheck:
-      test: ["CMD", "vault", "status"]
+      test: ["CMD-SHELL", "curl --max-time 3 http://localhost:8200/v1/sys/health > /dev/null"]
       interval: 10s
       timeout: 3s
       retries: 3
