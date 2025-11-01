@@ -1,0 +1,50 @@
+# Semantic Versioning Labels
+- name: semver:major
+  color: 'D73A4A'
+  description: 'Breaking changes - bumps major version'
+
+- name: semver:minor
+  color: '0E8A16'
+  description: 'New features - bumps minor version'
+
+- name: semver:patch
+  color: '0075CA'
+  description: 'Bug fixes and improvements - bumps patch version'
+
+- name: semver:none
+  color: 'EDEDED'
+  description: 'No version bump (chore, etc.)'
+
+# Type Labels
+- name: 'type: feature'
+  color: '0E8A16'
+  description: 'New feature or request'
+
+- name: 'type: bug'
+  color: 'D73A4A'
+  description: 'Something is not working'
+
+- name: 'type: documentation'
+  color: '0075CA'
+  description: 'Documentation improvements'
+
+- name: 'type: refactor'
+  color: 'FBCA04'
+  description: 'Code refactoring'
+
+- name: 'type: infrastructure'
+  color: '5319E7'
+  description: 'Infrastructure changes'
+
+# Status Labels
+- name: 'status: in progress'
+  color: 'FEF2C0'
+  description: 'Work in progress'
+
+- name: 'status: needs review'
+  color: 'FBCA04'
+  description: 'Needs review'
+
+- name: 'status: blocked'
+  color: 'B60205'
+  description: 'Blocked by other work'

@@ -9,6 +9,7 @@ This repository serves as the single source of truth for infrastructure setup. A
 - **Hashicorp Vault**: Secure secrets management (Docker-based)
 - **Terraform**: Infrastructure as Code for GitHub repository management
 - **Self-hosted GitHub Runner**: Automation bridge to lab infrastructure
+- **Automated Releases**: Semantic versioning with conventional commits
 
 ## Quick Start
 
@@ -58,6 +59,7 @@ terraform apply
 ## Documentation
 
 - **[BOOTSTRAP.md](BOOTSTRAP.md)**: Comprehensive setup guide with all manual steps
+- **[CONTRIBUTING.md](CONTRIBUTING.md)**: Contribution guidelines and release workflow
 - **[terraform/](terraform/)**: Terraform configuration for GitHub repository management
 - **[vault/config/](vault/config/)**: Vault configuration files
 
@@ -67,6 +69,16 @@ terraform apply
 .
 ├── docker-compose.yml          # Vault container setup
 ├── BOOTSTRAP.md                # Detailed setup instructions
+├── CONTRIBUTING.md             # Contribution guide
+├── Makefile                    # Common commands
+├── .releaserc.json            # Semantic release configuration
+├── .github/
+│   ├── workflows/
+│   │   ├── release.yml        # Automated releases
+│   │   ├── pr-labeler.yml     # PR auto-labeling
+│   │   └── label-sync.yml     # Label synchronization
+│   ├── pull_request_template.md
+│   └── labels.yml             # Repository labels
 ├── terraform/
 │   ├── main.tf                 # Terraform provider configuration
 │   ├── variables.tf            # Input variables
@@ -88,12 +100,25 @@ terraform apply
 - GitHub tokens are stored in Vault, never in code
 - All sensitive files are in `.gitignore`
 
+## Contributing
+
+This repository uses automated semantic versioning. See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- Conventional commit format
+- Pull request workflow
+- Automated release process
+
+**TL;DR**: Use conventional commit format for PR titles:
+- `feat:` for new features (minor version)
+- `fix:` for bug fixes (patch version)
+- `feat!:` or `BREAKING CHANGE:` for breaking changes (major version)
+
 ## Next Steps
 
 1. Review [BOOTSTRAP.md](BOOTSTRAP.md) for detailed setup
 2. Configure your self-hosted GitHub runner
 3. Customize repository definitions in [terraform/repositories.tf](terraform/repositories.tf)
 4. Set up GitHub Actions workflows in created repos
+5. Read [CONTRIBUTING.md](CONTRIBUTING.md) before making changes
 
 ## Source Material
 

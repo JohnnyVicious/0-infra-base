@@ -1,0 +1,73 @@
+name: PR Labeler
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  label:
+    name: Label PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Label PR based on title
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+            const prNumber = context.payload.pull_request.number;
+
+            // Remove existing semver labels
+            const currentLabels = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber
+            });
+
+            const semverLabels = ['semver:major', 'semver:minor', 'semver:patch', 'semver:none'];
+            for (const label of currentLabels.data) {
+              if (semverLabels.includes(label.name)) {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  name: label.name
+                });
+              }
+            }
+
+            // Determine new label based on conventional commit format
+            let newLabel = 'semver:none';
+
+            if (title.includes('BREAKING CHANGE') || title.startsWith('!') || /^[a-z]+!:/.test(title)) {
+              newLabel = 'semver:major';
+            } else if (title.startsWith('feat:') || title.startsWith('feat(')) {
+              newLabel = 'semver:minor';
+            } else if (
+              title.startsWith('fix:') || title.startsWith('fix(') ||
+              title.startsWith('perf:') || title.startsWith('perf(') ||
+              title.startsWith('docs:') || title.startsWith('docs(') ||
+              title.startsWith('style:') || title.startsWith('style(') ||
+              title.startsWith('refactor:') || title.startsWith('refactor(') ||
+              title.startsWith('test:') || title.startsWith('test(') ||
+              title.startsWith('build:') || title.startsWith('build(') ||
+              title.startsWith('ci:') || title.startsWith('ci(')
+            ) {
+              newLabel = 'semver:patch';
+            }
+
+            // Add the new label
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              labels: [newLabel]
+            });
+
+            core.info(`Added label: ${newLabel}`);
