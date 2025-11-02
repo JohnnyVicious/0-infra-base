@@ -1,3 +1,10 @@
+## [1.0.8](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.7...v1.0.8) (2025-11-02)
+
+
+### Continuous Integration
+
+* **renovate:** increase prConcurrentLimit/prHourlyLimit and add recreateWhen & pinDigests ([5a96647](https://github.com/JohnnyVicious/0-infra-base/commit/5a96647631b8e329d0912b598c17b9965405f676))
+
 ## [1.0.7](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.6...v1.0.7) (2025-11-02)
 
 
