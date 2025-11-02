@@ -1,3 +1,10 @@
+## [1.0.9](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.8...v1.0.9) (2025-11-02)
+
+
+### Documentation
+
+* **readme:** simplify README to concise TL;DR, Getting Started, Automation Cheatsheet and Useful Docs ([6ff7525](https://github.com/JohnnyVicious/0-infra-base/commit/6ff7525adef534f0fe1d46d06b4ac99e73793508))
+
 ## [1.0.8](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.7...v1.0.8) (2025-11-02)
 
 
