@@ -1,3 +1,10 @@
+## [1.0.15](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.14...v1.0.15) (2025-11-02)
+
+
+### Continuous Integration
+
+* **stack-lint,test:** update actions/checkout to v5 ([5b67195](https://github.com/JohnnyVicious/0-infra-base/commit/5b671958bb2779edee843841c42eabf2fba12432))
+
 ## [1.0.14](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.13...v1.0.14) (2025-11-02)
 
 
