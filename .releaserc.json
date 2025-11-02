@@ -48,6 +48,12 @@
         "changelogFile": "CHANGELOG.md"
       }
     ],
-    "@semantic-release/github"
+    "@semantic-release/github",
+    [
+      "@semantic-release/exec",
+      {
+        "successCmd": "node scripts/tag-major.js ${nextRelease.version}"
+      }
+    ]
   ]
 }
