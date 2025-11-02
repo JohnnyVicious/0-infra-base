@@ -17,8 +17,10 @@
   "commitMessagePrefix": "chore(deps):",
   "commitMessageAction": "update",
   "commitMessageTopic": "{{depName}}",
-  "prConcurrentLimit": 5,
-  "prHourlyLimit": 2,
+  "recreateWhen": "always",
+  "pinDigests": false,
+  "prConcurrentLimit": 50,
+  "prHourlyLimit": 10,
   "minimumReleaseAge": "3 days",
   "packageRules": [
     {
