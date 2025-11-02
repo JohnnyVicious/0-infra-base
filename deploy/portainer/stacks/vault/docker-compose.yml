@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   vault:
-    image: hashicorp/vault:1.15.0
+    image: hashicorp/vault:1.15.0@sha256:ccbb5fde9d55b3dc57cf8694dea9c988ba0127b205661b652b5264f8d5901a58
     container_name: vault
     restart: unless-stopped
     ports:
