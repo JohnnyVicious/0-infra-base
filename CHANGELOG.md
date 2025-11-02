@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.5...v1.0.6) (2025-11-02)
+
+
+### Continuous Integration
+
+* use RENOVATE_TOKEN for release changelog PR and disable pinDigests for GitHub Actions ([4670b88](https://github.com/JohnnyVicious/0-infra-base/commit/4670b88343e5380fae9d3402473f0eae42904367))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
