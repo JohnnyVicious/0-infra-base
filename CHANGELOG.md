@@ -1,3 +1,10 @@
+## [1.0.11](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.10...v1.0.11) (2025-11-02)
+
+
+### Continuous Integration
+
+* **stack-lint,actions,docs:** add stack-lint workflow and cache-compose action; document stack lint ([8d53afa](https://github.com/JohnnyVicious/0-infra-base/commit/8d53afa19f938c55ebf933c3bff3b3ed843be81d))
+
 ## [1.0.10](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.9...v1.0.10) (2025-11-02)
 
 
