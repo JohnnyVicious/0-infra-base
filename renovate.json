@@ -7,8 +7,8 @@
     ":enablePreCommit",
     "helpers:pinGitHubActionDigests"
   ],
-  "timezone": "America/New_York",
-  "schedule": ["before 6am on monday"],
+  "timezone": "UTC",
+  "schedule": ["after 3am and before 4am"],
   "labels": ["dependencies", "renovate"],
   "assignees": [],
   "reviewers": [],
