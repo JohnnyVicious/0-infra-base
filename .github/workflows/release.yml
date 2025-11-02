@@ -40,7 +40,7 @@ jobs:
         if: steps.semantic.outputs.new_release_published == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_PR_TOKEN }}
           commit-message: chore(changelog): update for v${{ steps.semantic.outputs.new_release_version }} [skip ci]
           branch: release/changelog-v${{ steps.semantic.outputs.new_release_version }}
           title: chore(changelog): update for v${{ steps.semantic.outputs.new_release_version }}

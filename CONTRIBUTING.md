@@ -134,6 +134,8 @@ Releases are **fully automated**. When a PR is merged to main:
    - Release notes categorized by type
    - A follow-up PR updating CHANGELOG.md
 
+> **Note:** The changelog PR is created via a personal access token stored as `RELEASE_PR_TOKEN`. If the token expires or is missing, the release workflow will publish the release but the changelog PR step will fail.
+
 ### Version Numbers
 
 We follow [Semantic Versioning](https://semver.org/):

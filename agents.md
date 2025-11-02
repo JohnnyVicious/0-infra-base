@@ -17,7 +17,7 @@ This document catalogues the automated agents that keep `0-infra-base` healthy. 
 
 ### Release workflow
 - **Purpose:** Automates semantic versioning using [`semantic-release`](https://semantic-release.gitbook.io/semantic-release/).
-- **Secrets:** Relies on the default `GITHUB_TOKEN` for both changelog commits and GitHub releases.
+- **Secrets:** Uses `GITHUB_TOKEN` for release publishing and a dedicated `RELEASE_PR_TOKEN` (PAT with `repo` scope) to open the changelog PR because repository rules block Actions-owned pull requests.
 - **Key behaviour:** Fetches full history (`fetch-depth: 0`) so semantic-release can inspect tags. After publishing, it raises a PR with the generated `CHANGELOG.md` entry instead of pushing directly to `main`.
 - **Where to customise:** Edit `.releaserc.json` to adjust release plugins or changelog sections. Tweak `.github/workflows/release.yml` if you want to label or auto-merge the changelog PR.
 
