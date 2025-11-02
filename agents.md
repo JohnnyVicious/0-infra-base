@@ -6,7 +6,7 @@ This document catalogues the automated agents that keep `0-infra-base` healthy. 
 
 | Agent | Type | Trigger(s) | Responsibilities | Configuration |
 |-------|------|------------|------------------|---------------|
-| Release workflow | GitHub Action | Push to `main` | Runs `semantic-release` to cut versions, update `CHANGELOG.md`, and publish GitHub releases | `.github/workflows/release.yml`, `.releaserc.json` |
+| Release workflow | GitHub Action | Push to `main` | Runs `semantic-release` to cut versions, publish GitHub releases, and open a `CHANGELOG.md` PR | `.github/workflows/release.yml`, `.releaserc.json` |
 | PR Labeler | GitHub Action | PR opened/edited/synced/reopened | Applies the correct `semver:*` label based on the PR title's conventional commit prefix | `.github/workflows/pr-labeler.yml`, `.github/labels.yml` |
 | Label Sync | GitHub Action | Push to `main` touching `.github/labels.yml`, manual dispatch | Reconciles repository labels with the manifest without pruning unknown labels | `.github/workflows/label-sync.yml`, `.github/labels.yml` |
 | Renovate config validator | GitHub Action | PR or push touching `renovate.json` or the workflow itself | Verifies that the Renovate configuration stays valid before merging | `.github/workflows/renovate-validate.yml`, `renovate.json` |
@@ -18,8 +18,8 @@ This document catalogues the automated agents that keep `0-infra-base` healthy. 
 ### Release workflow
 - **Purpose:** Automates semantic versioning using [`semantic-release`](https://semantic-release.gitbook.io/semantic-release/).
 - **Secrets:** Relies on the default `GITHUB_TOKEN` for both changelog commits and GitHub releases.
-- **Key behaviour:** Fetches full history (`fetch-depth: 0`) so semantic-release can inspect tags. If the repository accumulates manual tags, semantic-release will ignore those outside its versioning scheme.
-- **Where to customise:** Edit `.releaserc.json` to adjust release plugins or changelog sections. Extend the workflow if additional build artifacts are needed before publishing.
+- **Key behaviour:** Fetches full history (`fetch-depth: 0`) so semantic-release can inspect tags. After publishing, it raises a PR with the generated `CHANGELOG.md` entry instead of pushing directly to `main`.
+- **Where to customise:** Edit `.releaserc.json` to adjust release plugins or changelog sections. Tweak `.github/workflows/release.yml` if you want to label or auto-merge the changelog PR.
 
 ### PR Labeler
 - **Purpose:** Keeps PRs aligned with the release process by assigning one of the `semver:*` labels based on the title.

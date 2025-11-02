@@ -120,7 +120,7 @@ Once approved and merged, the release workflow automatically:
 2. Determines the next version number
 3. Generates release notes
 4. Creates a GitHub release
-5. Updates CHANGELOG.md
+5. Opens a PR updating CHANGELOG.md
 6. Tags the release
 
 ## Release Process
@@ -132,7 +132,7 @@ Releases are **fully automated**. When a PR is merged to main:
 3. Creates a new release with:
    - Version tag (e.g., v1.2.3)
    - Release notes categorized by type
-   - Updated CHANGELOG.md
+   - A follow-up PR updating CHANGELOG.md
 
 ### Version Numbers
 
