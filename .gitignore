@@ -40,8 +40,8 @@ override.tf.json
 terraform.rc
 
 # Vault data and logs (contains secrets)
-vault/data/
-vault/logs/
+deploy/portainer/stacks/vault/data/
+deploy/portainer/stacks/vault/logs/
 
 # Environment files
 .env

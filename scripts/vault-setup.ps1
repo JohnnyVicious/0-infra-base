@@ -20,7 +20,7 @@ function Invoke-VaultCommand {
 $running = docker ps --format "{{.Names}}" | Select-String -Pattern $VAULT_CONTAINER
 if (-not $running) {
     Write-Host "Error: Vault container is not running" -ForegroundColor Red
-    Write-Host "Start it with: docker-compose up -d"
+    Write-Host "Start it with: make vault-up"
     exit 1
 }
 

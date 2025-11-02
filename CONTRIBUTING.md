@@ -95,7 +95,7 @@ git push origin feat/your-feature-name
 ### 5. PR Title Format
 
 ✅ Good PR titles:
-- `feat: add docker-compose for vault`
+- `feat: add vault portainer stack`
 - `fix(ci): resolve release workflow permissions`
 - `docs: add contributing guide`
 - `feat!: upgrade to vault 1.15`
@@ -297,8 +297,8 @@ Before submitting a PR:
 
 1. Test Vault changes:
    ```bash
-   docker-compose down
-   docker-compose up -d
+   make vault-down
+   make vault-up
    make vault-status
    ```
 

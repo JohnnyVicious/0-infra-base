@@ -13,9 +13,9 @@ services:
     cap_add:
       - IPC_LOCK
     volumes:
-      - ./vault/config:/vault/config
-      - ./vault/data:/vault/data
-      - ./vault/logs:/vault/logs
+      - ./config:/vault/config
+      - ./data:/vault/data
+      - ./logs:/vault/logs
     command: server -config=/vault/config/vault.hcl
     healthcheck:
       test: ["CMD-SHELL", "curl --max-time 3 http://localhost:8200/v1/sys/health > /dev/null"]
