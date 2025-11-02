@@ -45,3 +45,26 @@ jobs:
             docker compose -f "$file" config >/dev/null
             echo "::endgroup::"
           done
+
+      - name: ShellCheck stack scripts
+        if: always()
+        run: |
+          # Find all shell scripts in stack directories
+          shopt -s nullglob
+          scripts=(deploy/portainer/stacks/**/*.sh)
+          if [ ${#scripts[@]} -eq 0 ]; then
+            echo "No shell scripts found in stacks"
+            exit 0
+          fi
+
+          # Install shellcheck if not available
+          if ! command -v shellcheck &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y shellcheck
+          fi
+
+          echo "::group::Linting shell scripts"
+          for script in "${scripts[@]}"; do
+            echo "Checking ${script}..."
+            shellcheck -S warning "$script"
+          done
+          echo "::endgroup::"
