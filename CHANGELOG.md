@@ -1,3 +1,10 @@
+## [1.0.10](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.9...v1.0.10) (2025-11-02)
+
+
+### Bug Fixes
+
+* **make,scripts:** detect docker compose v2/v1 and harden Vault setup scripts ([27b199a](https://github.com/JohnnyVicious/0-infra-base/commit/27b199aa196b81cfd5e675a280e661a7b860e0a6))
+
 ## [1.0.9](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.8...v1.0.9) (2025-11-02)
 
 
