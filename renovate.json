@@ -61,7 +61,7 @@
       "groupName": "GitHub Actions",
       "semanticCommitType": "chore",
       "semanticCommitScope": "ci",
-      "pinDigests": true
+      "pinDigests": false
     },
     {
       "description": "Separate major updates",
