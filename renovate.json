@@ -19,8 +19,8 @@
   "commitMessageTopic": "{{depName}}",
   "recreateWhen": "always",
   "pinDigests": false,
-  "prConcurrentLimit": 5,
-  "prHourlyLimit": 2,
+  "prConcurrentLimit": 50,
+  "prHourlyLimit": 10,
   "minimumReleaseAge": "3 days",
   "packageRules": [
     {
