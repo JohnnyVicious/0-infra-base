@@ -3,23 +3,36 @@
 VAULT_COMPOSE := deploy/portainer/stacks/vault/docker-compose.yml
 VAULT_ENV := deploy/portainer/stacks/vault/stack.env
 
+# Detect docker compose (v2) first, fallback to docker-compose (v1)
+DOCKER_COMPOSE := $(shell if docker compose version >/dev/null 2>&1; then echo "docker compose"; elif docker-compose version >/dev/null 2>&1; then echo "docker-compose"; else echo ""; fi)
+ifeq ($(strip $(DOCKER_COMPOSE)),)
+$(error docker compose (v2) or docker-compose (v1) is required but not found in PATH)
+endif
+
+# Convenience flag bundle for compose invocations
+VAULT_COMPOSE_CMD := $(DOCKER_COMPOSE) --env-file $(VAULT_ENV) -f $(VAULT_COMPOSE)
+
 help: ## Show this help message
 	@echo "Available commands:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 # Vault commands
 vault-up: ## Start Vault container
-	docker-compose --env-file $(VAULT_ENV) -f $(VAULT_COMPOSE) up -d
+	@if [ ! -f $(VAULT_ENV) ]; then \
+		echo "Creating default $(VAULT_ENV)"; \
+		touch $(VAULT_ENV); \
+	fi
+	$(VAULT_COMPOSE_CMD) up -d
 	@echo "Vault is starting... Wait a few seconds, then run 'make vault-status'"
 
 vault-down: ## Stop Vault container
-	docker-compose -f $(VAULT_COMPOSE) down
+	$(VAULT_COMPOSE_CMD) down --remove-orphans
 
 vault-status: ## Check Vault status
 	docker exec -it vault vault status || echo "Vault may be sealed or not initialized"
 
 vault-logs: ## View Vault logs
-	docker logs -f vault
+	$(VAULT_COMPOSE_CMD) logs -f
 
 vault-setup: ## Run interactive Vault setup script
 	@if [ -f scripts/vault-setup.sh ]; then \

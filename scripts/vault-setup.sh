@@ -1,9 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Vault Setup Helper Script
-# This script helps automate the Vault setup process
-
-set -e
+set -euo pipefail
 
 VAULT_ADDR=${VAULT_ADDR:-http://localhost:8200}
 VAULT_CONTAINER=${VAULT_CONTAINER:-vault}
@@ -14,11 +11,11 @@ echo ""
 
 # Function to execute vault commands in container
 vault_exec() {
-    docker exec -it $VAULT_CONTAINER vault "$@"
+    docker exec -it "$VAULT_CONTAINER" vault "$@"
 }
 
 # Check if Vault is running
-if ! docker ps | grep -q $VAULT_CONTAINER; then
+if ! docker ps --format '{{.Names}}' | grep -Fxq "$VAULT_CONTAINER"; then
     echo "Error: Vault container is not running"
     echo "Start it with: make vault-up"
     exit 1
@@ -67,11 +64,21 @@ do
             vault_exec secrets enable -path=github kv-v2 || echo "Secrets engine may already be enabled"
 
             # Get GitHub token
-            read -sp "Enter your GitHub Personal Access Token: " GITHUB_TOKEN
+            read -rsp "Enter your GitHub Personal Access Token: " GITHUB_TOKEN || true
             echo ""
+            if [[ -z "${GITHUB_TOKEN:-}" ]]; then
+                echo "Token cannot be empty. Aborting."
+                unset GITHUB_TOKEN
+                continue
+            fi
 
             # Get GitHub owner
-            read -p "Enter your GitHub username or organization: " GITHUB_OWNER
+            read -rp "Enter your GitHub username or organization: " GITHUB_OWNER
+            if [[ -z "${GITHUB_OWNER:-}" ]]; then
+                echo "Owner cannot be empty. Aborting."
+                unset GITHUB_OWNER
+                continue
+            fi
 
             # Store in Vault
             echo "Storing GitHub token in Vault..."
@@ -79,6 +86,9 @@ do
 
             echo "Storing GitHub owner in Vault..."
             vault_exec kv put github/config owner="$GITHUB_OWNER"
+
+            unset GITHUB_TOKEN
+            unset GITHUB_OWNER
 
             echo "GitHub secrets configured successfully!"
             ;;
@@ -122,8 +132,8 @@ EOF
             echo "Run these commands in your terminal:"
             echo ""
             echo "export VAULT_ADDR=$VAULT_ADDR"
-            echo "export TF_VAR_github_token=\$(docker exec $VAULT_CONTAINER vault kv get -field=token github/terraform)"
-            echo "export TF_VAR_github_owner=\$(docker exec $VAULT_CONTAINER vault kv get -field=owner github/config)"
+            printf 'export TF_VAR_github_token=$(docker exec "%s" vault kv get -field=token github/terraform)\n' "$VAULT_CONTAINER"
+            printf 'export TF_VAR_github_owner=$(docker exec "%s" vault kv get -field=owner github/config)\n' "$VAULT_CONTAINER"
             echo ""
             ;;
         "View GitHub token")

@@ -1,6 +1,7 @@
 # Vault Setup Helper Script (PowerShell)
 # This script helps automate the Vault setup process on Windows
 
+Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $VAULT_ADDR = if ($env:VAULT_ADDR) { $env:VAULT_ADDR } else { "http://localhost:8200" }
@@ -76,12 +77,22 @@ do {
 
             # Get GitHub token
             $GITHUB_TOKEN = Read-Host "Enter your GitHub Personal Access Token" -AsSecureString
-            $GITHUB_TOKEN_PLAIN = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
-                [Runtime.InteropServices.Marshal]::SecureStringToBSTR($GITHUB_TOKEN)
-            )
+            if (-not $GITHUB_TOKEN) {
+                Write-Host "Token cannot be empty. Aborting." -ForegroundColor Red
+                Remove-Variable GITHUB_TOKEN -ErrorAction SilentlyContinue
+                continue
+            }
+            $tokenPtr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($GITHUB_TOKEN)
+            $GITHUB_TOKEN_PLAIN = [Runtime.InteropServices.Marshal]::PtrToStringAuto($tokenPtr)
 
             # Get GitHub owner
             $GITHUB_OWNER = Read-Host "Enter your GitHub username or organization"
+            if ([string]::IsNullOrWhiteSpace($GITHUB_OWNER)) {
+                Write-Host "Owner cannot be empty. Aborting." -ForegroundColor Red
+                [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($tokenPtr)
+                Remove-Variable GITHUB_TOKEN -ErrorAction SilentlyContinue
+                continue
+            }
 
             # Store in Vault
             Write-Host "Storing GitHub token in Vault..."
@@ -91,6 +102,10 @@ do {
             Invoke-VaultCommand @("kv", "put", "github/config", "owner=$GITHUB_OWNER")
 
             Write-Host "GitHub secrets configured successfully!" -ForegroundColor Green
+            [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($tokenPtr)
+            Remove-Variable GITHUB_TOKEN -ErrorAction SilentlyContinue
+            Remove-Variable GITHUB_TOKEN_PLAIN -ErrorAction SilentlyContinue
+            Remove-Variable GITHUB_OWNER -ErrorAction SilentlyContinue
         }
         "5" {
             Write-Host "Setting up AppRole authentication for Terraform..." -ForegroundColor Yellow
