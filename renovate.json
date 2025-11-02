@@ -26,7 +26,7 @@
         "docker"
       ],
       "enabled": true,
-      "pinDigests": true
+      "pinDigests": false
     },
     {
       "description": "Automatically merge minor and patch updates for Docker images",
@@ -82,13 +82,6 @@
         "patch"
       ],
       "semanticCommitType": "chore"
-    },
-    {
-      "description": "Pin Docker image digests for security",
-      "matchDatasources": [
-        "docker"
-      ],
-      "pinDigests": true
     }
   ],
   "terraform": {
