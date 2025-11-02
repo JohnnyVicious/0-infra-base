@@ -1,3 +1,10 @@
+## [1.0.14](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.13...v1.0.14) (2025-11-02)
+
+
+### Bug Fixes
+
+* **scripts:** normalize bare semver and use v-prefixed canonical version in tag-major.js ([e13b7aa](https://github.com/JohnnyVicious/0-infra-base/commit/e13b7aa1ebf08e403e45de25066f12cb68248897))
+
 ## [1.0.12](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.11...v1.0.12) (2025-11-02)
 
 
