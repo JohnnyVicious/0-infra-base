@@ -20,7 +20,7 @@ vault_exec() {
 # Check if Vault is running
 if ! docker ps | grep -q $VAULT_CONTAINER; then
     echo "Error: Vault container is not running"
-    echo "Start it with: docker-compose up -d"
+    echo "Start it with: make vault-up"
     exit 1
 fi
 

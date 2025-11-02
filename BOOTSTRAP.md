@@ -14,7 +14,7 @@ This guide covers the manual setup steps required to bootstrap your infrastructu
 ### 1.1 Start Vault
 
 ```bash
-docker-compose up -d
+make vault-up
 ```
 
 ### 1.2 Initialize Vault
@@ -204,10 +204,10 @@ terraform apply
 
 ### Backing Up Vault Data
 
-The `./vault/data` directory contains your Vault data. Back this up regularly:
+The `deploy/portainer/stacks/vault/data` directory (created on first boot) contains your Vault data. Back this up regularly:
 
 ```bash
-tar -czf vault-backup-$(date +%Y%m%d).tar.gz ./vault/data
+tar -czf vault-backup-$(date +%Y%m%d).tar.gz deploy/portainer/stacks/vault/data
 ```
 
 ### Unsealing Vault After Restart

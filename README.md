@@ -16,7 +16,7 @@ This repository serves as the single source of truth for infrastructure setup. A
 ### 1. Start Vault
 
 ```bash
-docker-compose up -d
+make vault-up
 ```
 
 ### 2. Bootstrap Vault and Secrets
@@ -62,18 +62,31 @@ terraform apply
 - **[CONTRIBUTING.md](CONTRIBUTING.md)**: Contribution guidelines and release workflow
 - **[.github/renovate.md](.github/renovate.md)**: Renovate Bot configuration and usage
 - **[terraform/](terraform/)**: Terraform configuration for GitHub repository management
-- **[vault/config/](vault/config/)**: Vault configuration files
+- **[deploy/portainer/](deploy/portainer/)**: Portainer stack definitions (Vault, Harbor, ...)
 
 ## Repository Structure
 
 ```
 .
-├── docker-compose.yml          # Vault container setup
 ├── BOOTSTRAP.md                # Detailed setup instructions
 ├── CONTRIBUTING.md             # Contribution guide
 ├── Makefile                    # Common commands
 ├── .releaserc.json            # Semantic release configuration
 ├── renovate.json              # Renovate Bot configuration
+├── deploy/
+│   └── portainer/
+│       ├── README.md               # Stack deployment guide
+│       └── stacks/
+│           ├── harbor/
+│           │   ├── docker-compose.yml
+│           │   ├── README.md
+│           │   └── stack.env
+│           └── vault/
+│               ├── docker-compose.yml
+│               ├── README.md
+│               ├── config/
+│               │   └── vault.hcl
+│               └── stack.env
 ├── .github/
 │   ├── workflows/
 │   │   ├── release.yml        # Automated releases
@@ -92,9 +105,6 @@ terraform apply
 │   ├── repositories.tf         # GitHub repository definitions
 │   ├── outputs.tf              # Terraform outputs
 │   └── terraform.tfvars.example # Example variables file
-├── vault/
-│   └── config/
-│       └── vault.hcl          # Vault server configuration
 └── scripts/
     ├── vault-setup.sh         # Vault setup helper (Linux/Mac)
     └── vault-setup.ps1        # Vault setup helper (Windows)
@@ -108,7 +118,7 @@ terraform apply
 - **Branch Protection**: CodeQL required for PR merges
 
 ### Security Best Practices
-- Vault data is stored in `./vault/data/` (gitignored)
+- Vault data is stored in `deploy/portainer/stacks/vault/data/` (gitignored)
 - Unseal keys and root token must be stored securely
 - GitHub tokens are stored in Vault, never in code
 - All sensitive files are in `.gitignore`
