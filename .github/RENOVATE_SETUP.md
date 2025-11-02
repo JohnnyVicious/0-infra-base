@@ -19,9 +19,9 @@ This guide will help you enable Renovate Bot for this repository.
    - Create a "Configure Renovate" onboarding PR
    - Start scanning for updates weekly
 
-### Option 2: Self-Hosted Renovate
+### Option 2: Self-Hosted Renovate (GitHub Action)
 
-If you prefer to run Renovate on your self-hosted runner:
+If you prefer to run Renovate under your own credentials (instead of the hosted Renovate App):
 
 1. **Create a GitHub Personal Access Token**:
    - Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
@@ -36,29 +36,7 @@ If you prefer to run Renovate on your self-hosted runner:
    docker exec -it vault vault kv put github/renovate token=ghp_your_token_here
    ```
 
-3. **Create GitHub Actions workflow** (`.github/workflows/renovate-self-hosted.yml`):
-   ```yaml
-   name: Renovate
-
-   on:
-     schedule:
-       - cron: '0 6 * * 1'  # Monday at 6 AM
-     workflow_dispatch:
-
-   jobs:
-     renovate:
-       runs-on: self-hosted  # Use your self-hosted runner
-       steps:
-         - name: Checkout
-           uses: actions/checkout@v4
-
-         - name: Self-hosted Renovate
-           uses: renovatebot/github-action@v40.1.0
-           with:
-             token: ${{ secrets.RENOVATE_TOKEN }}
-           env:
-             RENOVATE_REPOSITORIES: ${{ github.repository }}
-   ```
+3. **Workflow**: This repository already ships with a scheduled workflow at `.github/workflows/renovate-run.yml`. It triggers nightly at **03:00 UTC** and can be dispatched manually. Update the cron if you need a different cadence or add additional env vars (e.g., `RENOVATE_AUTODISCOVER`).
 
 4. **Add secret to GitHub**:
    - Go to repository Settings → Secrets and variables → Actions
@@ -79,7 +57,7 @@ Renovate will create a PR titled **"Configure Renovate"**:
 ### After Onboarding
 
 1. **Dependency Dashboard** issue is created
-2. **Weekly scans** (Mondays before 6 AM)
+2. **Nightly scans** (03:00 UTC via GitHub Action)
 3. **PRs created** for outdated dependencies
 4. **Security alerts** trigger immediate PRs
 
@@ -116,7 +94,7 @@ Run the label sync workflow to create Renovate labels:
 ## Configuration
 
 Your repository already has `renovate.json` configured with:
-- Weekly schedule (Mondays)
+- Nightly schedule (03:00 UTC) enforced by the GitHub Action
 - Conventional commit format
 - Grouped updates (Terraform, GitHub Actions)
 - Security vulnerability alerts
@@ -146,7 +124,7 @@ Or use the GitHub Actions workflow:
 - Renovate runs within hours
 
 **Self-hosted**:
-- Go to Actions → "Renovate"
+- Go to Actions → "Renovate Nightly"
 - Click "Run workflow"
 
 ## Troubleshooting

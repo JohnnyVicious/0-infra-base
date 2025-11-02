@@ -10,6 +10,7 @@ This document catalogues the automated agents that keep `0-infra-base` healthy. 
 | PR Labeler | GitHub Action | PR opened/edited/synced/reopened | Applies the correct `semver:*` label based on the PR title's conventional commit prefix | `.github/workflows/pr-labeler.yml`, `.github/labels.yml` |
 | Label Sync | GitHub Action | Push to `main` touching `.github/labels.yml`, manual dispatch | Reconciles repository labels with the manifest without pruning unknown labels | `.github/workflows/label-sync.yml`, `.github/labels.yml` |
 | Renovate config validator | GitHub Action | PR or push touching `renovate.json` or the workflow itself | Verifies that the Renovate configuration stays valid before merging | `.github/workflows/renovate-validate.yml`, `renovate.json` |
+| Renovate nightly run | GitHub Action | Daily cron (03:00 UTC), manual dispatch | Executes Renovate self-hosted action to ensure dependency checks run even if the hosted app is idle | `.github/workflows/renovate-run.yml`, `renovate.json`, `secrets.RENOVATE_TOKEN` |
 | CodeQL security scan | GitHub Action | Push/PR to `main`, weekly cron (Mon 06:00 UTC), manual dispatch | Runs GitHub CodeQL against the repository's GitHub Actions code and uploads SARIF results | `.github/workflows/codeql.yml`, `.github/codeql/codeql-config.yml` |
 | Renovate Bot | Hosted service | Weekly schedule (Mondays), manual dashboard | Opens dependency update PRs with conventional commit titles and curated labels | `renovate.json`, `.github/renovate.md`, `.github/RENOVATE_SETUP.md` |
 
@@ -37,6 +38,11 @@ This document catalogues the automated agents that keep `0-infra-base` healthy. 
 - **Implementation:** Installs the official Renovate CLI (`npm install -g renovate`) and runs `renovate-config-validator`.
 - **Where to customise:** Modify `.github/workflows/renovate-validate.yml` if you need to pin a Renovate version or add additional sanity checks.
 
+### Renovate nightly run
+- **Purpose:** Forces a Renovate sweep at 03:00 UTC daily so dependency updates keep flowing even if the hosted Renovate App is throttled.
+- **Secrets:** Requires `secrets.RENOVATE_TOKEN` (PAT with `repo`, `workflow`, and `read:org` if managing org repos). The default `GITHUB_TOKEN` cannot be used.
+- **Configuration:** Respects `renovate.json`; adjust that file to tune package rules. Modify `.github/workflows/renovate-run.yml` to change schedule, logging, or extra env vars (e.g., `RENOVATE_AUTODISCOVER`).
+- **Operational tips:** Monitor the workflow logs for rate-limit warnings. Rotate the PAT periodically and ensure it is scoped narrowly to the repositories Renovate must touch.
 ### CodeQL security scan
 - **Purpose:** Provides ongoing security analysis for the repository's GitHub Actions and scripts.
 - **Scope:** Currently configured to scan the `actions` language family via `.github/codeql/codeql-config.yml`. Extend the `languages` list if you add compiled code (Go, C#, etc.).
