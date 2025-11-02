@@ -22,7 +22,7 @@ jobs:
       - name: Renovate
         uses: renovatebot/github-action@v43.0.19
         with:
-          token: ${{ secrets.RELEASE_PR_TOKEN }}
+          token: ${{ secrets.RENOVATE_TOKEN }}
           configurationFile: renovate.json
         env:
           RENOVATE_REPOSITORIES: ${{ github.repository }}
