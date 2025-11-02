@@ -1,3 +1,10 @@
+## [1.0.12](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.11...v1.0.12) (2025-11-02)
+
+
+### Continuous Integration
+
+* **stack-lint,test:** add ShellCheck to stack-lint and add Test workflow for Terraform + shellcheck ([900466f](https://github.com/JohnnyVicious/0-infra-base/commit/900466f19503d2689df94e14ce13644b20adcc8b))
+
 ## [1.0.11](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.10...v1.0.11) (2025-11-02)
 
 
