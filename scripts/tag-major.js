@@ -14,27 +14,30 @@ function run(cmd) {
   execSync(cmd, { stdio: 'inherit' });
 }
 
-const version = process.argv[2];
+const rawVersion = process.argv[2];
 
-if (!version) {
+if (!rawVersion) {
   console.error('tag-major.js: missing version argument');
   process.exit(1);
 }
 
-if (!/^v?\d+\.\d+\.\d+$/.test(version)) {
-  console.error(`tag-major.js: invalid semver version "${version}"`);
+if (!/^v?\d+\.\d+\.\d+$/.test(rawVersion)) {
+  console.error(`tag-major.js: invalid semver version "${rawVersion}"`);
   process.exit(1);
 }
 
 // Ensure we're in a git repo
 run('git rev-parse --is-inside-work-tree');
 
-const major = version.replace(/^v?(\d+)\..*/, 'v$1');
+// semantic-release sometimes passes bare semver (1.2.3); normalize to v1.2.3
+const canonicalVersion = rawVersion.startsWith('v') ? rawVersion : `v${rawVersion}`;
 
-console.log(`Updating major tag ${major} -> ${version}`);
+const major = canonicalVersion.replace(/^v(\d+)\..*/, 'v$1');
+
+console.log(`Updating major tag ${major} -> ${canonicalVersion}`);
 
 // Force-create or update the lightweight tag locally
-run(`git tag -f ${major} ${version}`);
+run(`git tag -f ${major} ${canonicalVersion}`);
 
 // Push the updated major tag
 run(`git push --force origin ${major}`);
