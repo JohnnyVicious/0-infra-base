@@ -28,7 +28,7 @@
         "docker"
       ],
       "enabled": true,
-      "pinDigests": true
+      "pinDigests": false
     },
     {
       "description": "Automatically merge minor and patch updates for Docker images",
@@ -63,7 +63,7 @@
       "groupName": "GitHub Actions",
       "semanticCommitType": "chore",
       "semanticCommitScope": "ci",
-      "pinDigests": true
+      "pinDigests": false
     },
     {
       "description": "Separate major updates",
@@ -84,13 +84,6 @@
         "patch"
       ],
       "semanticCommitType": "chore"
-    },
-    {
-      "description": "Pin Docker image digests for security",
-      "matchDatasources": [
-        "docker"
-      ],
-      "pinDigests": true
     }
   ],
   "terraform": {
@@ -100,9 +93,9 @@
     {
       "customType": "regex",
       "description": "Update Vault version in documentation",
-      "managerFilePatterns": [
-        "/^BOOTSTRAP\\.md$/",
-        "/^README\\.md$/"
+      "fileMatch": [
+        "^BOOTSTRAP\\.md$",
+        "^README\\.md$"
       ],
       "matchStrings": [
         "vault:(?<currentValue>.*?)@sha"

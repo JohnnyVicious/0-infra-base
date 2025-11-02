@@ -1,3 +1,19 @@
+## [1.0.7](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.6...v1.0.7) (2025-11-02)
+
+
+### Continuous Integration
+
+* **release:** add step id and enable automerge for changelog PRs ([0f10273](https://github.com/JohnnyVicious/0-infra-base/commit/0f1027365ed788fbe34ec44521cac57972bfca4e))
+* **renovate:** disable pinDigests for Docker images and remove duplicate pin rule ([7e379ee](https://github.com/JohnnyVicious/0-infra-base/commit/7e379eee37a37f0496c29115ccfc369c3beadb5c))
+* **renovate:** use fileMatch for custom manager and normalize recreateWhen/pinDigests placement ([720bbfe](https://github.com/JohnnyVicious/0-infra-base/commit/720bbfeb960f81c0469febaaf8b94c7cf0090bd0))
+
+## [1.0.6](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.5...v1.0.6) (2025-11-02)
+
+
+### Continuous Integration
+
+* use RENOVATE_TOKEN for release changelog PR and disable pinDigests for GitHub Actions ([4670b88](https://github.com/JohnnyVicious/0-infra-base/commit/4670b88343e5380fae9d3402473f0eae42904367))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
