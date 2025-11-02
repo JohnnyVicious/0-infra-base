@@ -17,6 +17,8 @@
   "commitMessagePrefix": "chore(deps):",
   "commitMessageAction": "update",
   "commitMessageTopic": "{{depName}}",
+  "recreateWhen": "always",
+  "pinDigests": false,
   "prConcurrentLimit": 5,
   "prHourlyLimit": 2,
   "minimumReleaseAge": "3 days",
@@ -91,9 +93,9 @@
     {
       "customType": "regex",
       "description": "Update Vault version in documentation",
-      "managerFilePatterns": [
-        "/^BOOTSTRAP\\.md$/",
-        "/^README\\.md$/"
+      "fileMatch": [
+        "^BOOTSTRAP\\.md$",
+        "^README\\.md$"
       ],
       "matchStrings": [
         "vault:(?<currentValue>.*?)@sha"
