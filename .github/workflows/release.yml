@@ -15,14 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Run semantic-release
         id: semantic
@@ -39,7 +39,7 @@ jobs:
       - name: Create changelog PR
         if: steps.semantic.outputs.new_release_published == 'true'
         id: cpr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
           commit-message: "chore(changelog): update for v${{ steps.semantic.outputs.new_release_version }} [skip ci]"
