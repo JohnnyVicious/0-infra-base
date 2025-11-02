@@ -145,6 +145,8 @@ Automated releases based on conventional commits. See [CONTRIBUTING.md](CONTRIBU
 
 Runs weekly (Mondays) and creates a Dependency Dashboard issue.
 
+Additionally, a GitHub Action (`Renovate Nightly`) executes Renovate every day at 03:00 UTC. Configure the `RENOVATE_TOKEN` secret so the workflow can authenticate.
+
 ## Next Steps
 
 1. Review [BOOTSTRAP.md](BOOTSTRAP.md) for detailed setup
