@@ -7,6 +7,7 @@ Infrastructure bootstrap repo for Vault, Terraform, and supporting automation. E
 - **Harbor** registry stack (`deploy/portainer/stacks/harbor/`)
 - **Terraform** configuration for GitHub org (`terraform/`)
 - **Automation**: semantic-release, Renovate nightly, CodeQL, PR labelling
+- **CI guardrails**: compose lint, Renovate config validation, stack checks
 
 ## Getting Started
 1. `make vault-up` then run `scripts/vault-setup.sh` (or `.ps1`) to initialise Vault and store GitHub creds.

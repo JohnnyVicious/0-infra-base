@@ -1,0 +1,41 @@
+name: Cache Docker Compose
+description: Ensure docker compose CLI plugin is available and cached
+
+runs:
+  using: composite
+  steps:
+    - name: Determine cache key
+      id: compose-version
+      shell: bash
+      run: |
+        if docker compose version >/dev/null 2>&1; then
+          VERSION=$(docker compose version --short)
+          echo "key=docker-compose-${VERSION}" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        if docker-compose version >/dev/null 2>&1; then
+          VERSION=$(docker-compose version --short)
+          echo "key=docker-compose-v1-${VERSION}" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        echo "key=" >> "$GITHUB_OUTPUT"
+
+    - name: Restore docker compose cache
+      if: steps.compose-version.outputs.key != ''
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.docker/cli-plugins
+          /usr/libexec/docker/cli-plugins
+        key: ${{ steps.compose-version.outputs.key }}
+
+    - name: Install docker compose if missing
+      shell: bash
+      run: |
+        if docker compose version >/dev/null 2>&1; then
+          exit 0
+        fi
+        mkdir -p ~/.docker/cli-plugins
+        curl -sSL https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+        chmod +x ~/.docker/cli-plugins/docker-compose
+        docker compose version

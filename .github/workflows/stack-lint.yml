@@ -1,0 +1,47 @@
+name: Stack Lint
+
+on:
+  pull_request:
+    paths:
+      - 'deploy/portainer/stacks/**/docker-compose.yml'
+      - 'deploy/portainer/stacks/**/stack.env'
+      - '.github/workflows/stack-lint.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'deploy/portainer/stacks/**/docker-compose.yml'
+      - 'deploy/portainer/stacks/**/stack.env'
+      - '.github/workflows/stack-lint.yml'
+
+jobs:
+  lint:
+    name: Validate Portainer stacks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure docker compose available
+        uses: ./.github/actions/cache-compose
+
+      - name: List stacks
+        id: stacks
+        run: |
+          mapfile -t files < <(find deploy/portainer/stacks -name "docker-compose.yml" | sort)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No compose files found"
+            exit 0
+          fi
+          printf 'compose_files=%s\n' "$(printf '%s|' "${files[@]}")" >> "$GITHUB_OUTPUT"
+
+      - name: Validate compose files
+        if: steps.stacks.outputs.compose_files
+        run: |
+          IFS='|' read -r -a files <<< "${{ steps.stacks.outputs.compose_files }}"
+          for file in "${files[@]}"; do
+            echo "::group::Validating ${file}"
+            # docker compose config needs a project directory; use file's parent
+            docker compose -f "$file" config >/dev/null
+            echo "::endgroup::"
+          done
