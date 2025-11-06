@@ -12,6 +12,7 @@ This document catalogues the automated agents that keep `0-infra-base` healthy. 
 | Renovate config validator | GitHub Action | PR or push touching `renovate.json` or the workflow itself | Verifies that the Renovate configuration stays valid before merging | `.github/workflows/renovate-validate.yml`, `renovate.json` |
 | Renovate nightly run | GitHub Action | Daily cron (03:00 UTC), manual dispatch | Executes Renovate self-hosted action to ensure dependency checks run even if the hosted app is idle | `.github/workflows/renovate-run.yml`, `renovate.json`, `secrets.RENOVATE_TOKEN` |
 | Stack lint | GitHub Action | PRs/pushes touching Portainer stack files | Runs `docker compose config` against each stack to catch syntax issues before deployment | `.github/workflows/stack-lint.yml` |
+| Test workflow | GitHub Action | PRs, push to `main` | Formats and validates Terraform configurations and runs ShellCheck against repo scripts | `.github/workflows/test.yml` |
 | CodeQL security scan | GitHub Action | Push/PR to `main`, weekly cron (Mon 06:00 UTC), manual dispatch | Runs GitHub CodeQL against the repository's GitHub Actions code and uploads SARIF results | `.github/workflows/codeql.yml`, `.github/codeql/codeql-config.yml` |
 | Renovate Bot | Hosted service | Weekly schedule (Mondays), manual dashboard | Opens dependency update PRs with conventional commit titles and curated labels | `renovate.json`, `.github/renovate.md`, `.github/RENOVATE_SETUP.md` |
 
@@ -19,7 +20,7 @@ This document catalogues the automated agents that keep `0-infra-base` healthy. 
 
 ### Release workflow
 - **Purpose:** Automates semantic versioning using [`semantic-release`](https://semantic-release.gitbook.io/semantic-release/).
-- **Secrets:** Uses `GITHUB_TOKEN` for release publishing and a dedicated `RELEASE_PR_TOKEN` (PAT with `repo` scope) to open the changelog PR because repository rules block Actions-owned pull requests.
+- **Secrets:** Uses `GITHUB_TOKEN` for release publishing and a dedicated `RENOVATE_TOKEN` (PAT with `repo` scope) to open the changelog PR because repository rules block Actions-owned pull requests.
 - **Key behaviour:** Fetches full history (`fetch-depth: 0`) so semantic-release can inspect tags. After publishing, it raises a PR with the generated `CHANGELOG.md` entry instead of pushing directly to `main`.
 - **Where to customise:** Edit `.releaserc.json` to adjust release plugins or changelog sections. Tweak `.github/workflows/release.yml` if you want to label or auto-merge the changelog PR.
 
@@ -50,6 +51,10 @@ This document catalogues the automated agents that keep `0-infra-base` healthy. 
 - **Scope:** Watches `deploy/portainer/stacks/**/docker-compose.yml` and optional `stack.env` files; add more folders or lint steps in `.github/workflows/stack-lint.yml` as stacks grow.
 - **Behaviour:** Groups output per file for easy scanning. If `docker compose` exits with an error, the workflow fails, blocking the PR.
 - **Operational tips:** Ensure build agents have the Docker CLI plugin available. Extend the workflow to include `docker compose convert` or additional checks if you introduce Swarm/Kubernetes deployments.
+### Test workflow
+- **Purpose:** Keeps Terraform and shell tooling healthy by running linting and validation on every change.
+- **Scope:** Triggered on all pull requests and pushes to `main`; runs Terraform `fmt`, `init` (with local backend), and `validate` plus ShellCheck across the `scripts/` directory.
+- **Operational tips:** Fix format failures locally with `terraform fmt -recursive`, and run `shellcheck` if you modify scripts under `scripts/`.
 ### CodeQL security scan
 - **Purpose:** Provides ongoing security analysis for the repository's GitHub Actions and scripts.
 - **Scope:** Currently configured to scan the `actions` language family via `.github/codeql/codeql-config.yml`. Extend the `languages` list if you add compiled code (Go, C#, etc.).
