@@ -1,3 +1,10 @@
+## [1.0.16](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.15...v1.0.16) (2025-11-06)
+
+
+### Documentation
+
+* switch changelog PR token to RENOVATE_TOKEN and add Test workflow docs ([9d6d00c](https://github.com/JohnnyVicious/0-infra-base/commit/9d6d00cb2885ba673abdda7aa9eadd91536eb522))
+
 ## [1.0.15](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.14...v1.0.15) (2025-11-02)
 
 
