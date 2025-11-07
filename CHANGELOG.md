@@ -1,3 +1,10 @@
+## [1.0.17](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.16...v1.0.17) (2025-11-07)
+
+
+### Documentation
+
+* **vault:** update README for Vault stack setup and usage instructions ([c08ceca](https://github.com/JohnnyVicious/0-infra-base/commit/c08cecac95819e9aaf032f38a1a8635a654e8c09))
+
 ## [1.0.16](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.15...v1.0.16) (2025-11-06)
 
 
