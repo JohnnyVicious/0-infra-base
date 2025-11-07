@@ -1,3 +1,12 @@
+## [1.0.18](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.17...v1.0.18) (2025-11-07)
+
+
+### Documentation
+
+* **portainer:** add WSL guide for Portainer MCP and link from README ([896e7db](https://github.com/JohnnyVicious/0-infra-base/commit/896e7db64968158a2c1312dbd6eef0e9e22df3f8))
+* **vault:** add external link for HashiCorp Vault with Docker Compose ([3551c1d](https://github.com/JohnnyVicious/0-infra-base/commit/3551c1d62f639f1e79e2b8409598b3f2e00ffae8))
+* **vault:** update reference link for HashiCorp Vault with Docker Compose ([c281c82](https://github.com/JohnnyVicious/0-infra-base/commit/c281c82daa9ecfe2056116969958bbaedfbb660c))
+
 ## [1.0.17](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.16...v1.0.17) (2025-11-07)
 
 
