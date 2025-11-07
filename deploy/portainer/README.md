@@ -33,3 +33,11 @@ Store sensitive inputs (Portainer credentials, Harbor admin password, etc.) in r
 | Harbor | Container registry and cache | `stacks/harbor/docker-compose.yml` |
 
 Add additional stacks by creating new subdirectories under `stacks/`.
+
+## MCP Integration
+
+If you want to control or query Portainer from an AI assistant via the Model Context Protocol (MCP), install the official Portainer MCP server. See:
+
+- Portainer MCP on WSL (Ubuntu): `./portainer-mcp-wsl.md`
+
+The guide covers installation, background operation (systemd/tmux), Claude Desktop config, and troubleshooting.
