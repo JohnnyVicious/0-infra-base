@@ -40,20 +40,10 @@ jobs:
             echo "No compose files found under deploy/portainer/stacks" >&2
             exit 1
           fi
-          json='{"include":['
-          first=1
-          for compose in "${COMPOSE_FILES[@]}"; do
-            dir=$(dirname "$compose")
-            name=$(basename "$dir")
-            item=$(jq -n --arg name "$name" --arg dir "$dir" --arg compose "$compose" '{name:$name, dir:$dir, compose:$compose}')
-            if [[ $first -eq 1 ]]; then
-              json+="$item"
-              first=0
-            else
-              json+=",$item"
-            fi
-          done
-          json+=']}'
+          json=$(printf '%s\n' "${COMPOSE_FILES[@]}" \
+            | jq -R -s 'split("\n")[:-1]
+                | map({compose: ., dir: (. | sub("/docker-compose.yml$"; "")), name: (. | capture(".*/(?<name>[^/]+)/docker-compose.yml").name)})
+                | {include: .}' -c)
           echo "Matrix: $json"
           echo "matrix=$json" >> "$GITHUB_OUTPUT"
 
