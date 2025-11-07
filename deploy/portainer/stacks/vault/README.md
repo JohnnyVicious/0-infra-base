@@ -70,7 +70,7 @@ curl http://localhost:8200/v1/sys/health
 - External access: open http://localhost:8200 for the UI. Internally, the service advertises `api_addr` as `http://vault:8200` for container-to-container traffic.
 - Do not add an explicit `-config=/vault/config/vault.hcl` to the compose `command`. The image entrypoint already supplies `-config` and duplicating it can cause a double load and a port bind error.
 - Data durability: the `data/` directory backs the `file` storage; do not delete it unless you intend to reset Vault.
-- https://ambar-thecloudgarage.medium.com/hashicorp-vault-with-docker-compose-0ea2ce1ca5ab
+- https://ambar-thecloudgarage.medium.com/hashicorp-vault-with-docker-compose-0ea2ce1ca5ab is a useful reference.
 
 ## Tear Down
 
