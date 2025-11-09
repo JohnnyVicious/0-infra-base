@@ -1,0 +1,114 @@
+name: Portainer Stacks Up Test
+
+on:
+  pull_request:
+    paths:
+      - 'deploy/portainer/stacks/**'
+      - '.github/workflows/stack-up-test.yml'
+  push:
+    branches: [ main ]
+    paths:
+      - 'deploy/portainer/stacks/**'
+      - '.github/workflows/stack-up-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stack-up-test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  discover:
+    name: Discover stacks
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build dynamic matrix
+        id: set-matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          mapfile -t COMPOSE_FILES < <(find deploy/portainer/stacks -mindepth 2 -maxdepth 2 -type f -name 'docker-compose.yml' | sort)
+          if [[ ${#COMPOSE_FILES[@]} -eq 0 ]]; then
+            echo "No compose files found under deploy/portainer/stacks" >&2
+            exit 1
+          fi
+          json=$(printf '%s\n' "${COMPOSE_FILES[@]}" \
+            | jq -R -s 'split("\n")[:-1]
+                | map({compose: ., dir: (. | sub("/docker-compose.yml$"; "")), name: (. | capture(".*/(?<name>[^/]+)/docker-compose.yml").name)})
+                | {include: .}' -c)
+          echo "Matrix: $json"
+          echo "matrix=$json" >> "$GITHUB_OUTPUT"
+
+  up-down:
+    name: Compose up/down smoke tests (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    needs: discover
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Docker/Compose versions
+        run: |
+          docker version
+          docker compose version || true
+
+      - name: Bring up and tear down ${{ matrix.name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+
+          stack_dir='${{ matrix.dir }}'
+          compose_file='${{ matrix.compose }}'
+          stack_name='${{ matrix.name }}'
+
+          pushd "$stack_dir" >/dev/null
+          env_args=()
+          if [[ -f stack.env ]]; then
+            env_args+=(--env-file stack.env)
+            echo "Using stack.env for ${stack_name}"
+          fi
+
+          docker compose -f docker-compose.yml down -v --remove-orphans || true
+          docker compose "${env_args[@]}" -f docker-compose.yml pull || true
+
+          set +e
+          if docker compose "${env_args[@]}" -f docker-compose.yml up -d --quiet-pull --wait >/dev/null 2>&1; then
+            up_status=0
+          else
+            docker compose "${env_args[@]}" -f docker-compose.yml up -d --quiet-pull
+            up_status=$?
+            echo "compose --wait unsupported; sleeping briefly for basic readiness"
+            sleep 20
+          fi
+          set -e
+
+          docker compose -f docker-compose.yml ps -a > "../artifacts/${stack_name}-ps.txt" || true
+          docker compose -f docker-compose.yml logs --no-color --timestamps > "../artifacts/${stack_name}-logs.txt" || true
+
+          docker compose -f docker-compose.yml down -v --remove-orphans || true
+          popd >/dev/null
+
+          exit "$up_status"
+
+      - name: Upload logs for ${{ matrix.name }}
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stack-compose-logs-${{ matrix.name }}
+          path: artifacts
+          if-no-files-found: ignore
+          retention-days: 7
