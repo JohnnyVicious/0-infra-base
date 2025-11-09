@@ -1,3 +1,15 @@
+## [1.1.0](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.18...v1.1.0) (2025-11-09)
+
+
+### Features
+
+* **workflow:** add Portainer Stacks Up Test workflow ([0156384](https://github.com/JohnnyVicious/0-infra-base/commit/0156384c82b4c16814673f652a879352411f770b))
+
+
+### Code Refactoring
+
+* **workflow:** simplify JSON matrix generation for compose files ([6b2d202](https://github.com/JohnnyVicious/0-infra-base/commit/6b2d20218345bce04d640b9046145bacb3f1c43b))
+
 ## [1.0.18](https://github.com/JohnnyVicious/0-infra-base/compare/v1.0.17...v1.0.18) (2025-11-07)
 
 
